@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Event Emitter</title>
+  </head>
+  <body>
+    <script>
+      // Add your implementation here, and initialize eventEmitter with an actual value;
+      var eventEmitter = undefined;
+
+      function responseToEvent(msg) {
+        console.log(msg);
+      }
+
+      eventEmitter.on("pramp", responseToEvent); // Same as subscribe
+      eventEmitter.once("pramp", function(msg) {
+        console.log(msg + " just once!");
+      });
+      eventEmitter.emit("pramp", "1st"); // '1st'; '1st just once!'
+      eventEmitter.emit("pramp", "2nd"); // '2nd'
+      eventEmitter.off("pramp", responseToEvent); // Remove this particular function
+      eventEmitter.emit("pramp", "3rd"); // undefined
+      eventEmitter.emit("pramp", "1st"); // undefined
+    </script>
+  </body>
+</html>

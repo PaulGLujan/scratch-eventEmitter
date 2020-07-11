@@ -7,7 +7,32 @@
   <body>
     <script>
       // Add your implementation here, and initialize eventEmitter with an actual value;
-      var eventEmitter = undefined;
+      var eventEmitter = {
+        events: {},
+
+        on(name, cb, isOnce = false) {
+          if (!this.events[name]) {
+            this.events[name] = [];
+          }
+          this.events[name].push({ cb, isOnce });
+        },
+
+        emit(name, ...args) {
+          this.events[name].forEach(({ cb, isOnce }) => {
+            cb(...args);
+            if (isOnce) this.off(name, cb);
+          });
+        },
+
+        off(name, cb) {
+          const indexOfCb = this.events[name].indexOf(cb);
+          this.events[name].splice(indexOfCb, 1);
+        },
+
+        once(name, cb) {
+          this.on(name, cb, true);
+        }
+      };
 
       function responseToEvent(msg) {
         console.log(msg);
@@ -20,8 +45,8 @@
       eventEmitter.emit("pramp", "1st"); // '1st'; '1st just once!'
       eventEmitter.emit("pramp", "2nd"); // '2nd'
       eventEmitter.off("pramp", responseToEvent); // Remove this particular function
-      eventEmitter.emit("pramp", "3rd"); // undefined
-      eventEmitter.emit("pramp", "1st"); // undefined
+      eventEmitter.emit("pramp", "3rd"); //
+      eventEmitter.emit("pramp", "1st"); //
     </script>
   </body>
 </html>
